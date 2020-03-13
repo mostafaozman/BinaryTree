@@ -18,7 +18,6 @@ public:
     // setters
     void setRight(tree* inRight);
     void setLeft(tree* inLeft);
-    void setPrev(tree* inPrev);
     void setNext(tree* inNext);
     void setRoot(tree* inRoot);
     void setData(int inData);
@@ -33,7 +32,6 @@ public:
     tree* next;
     tree* left;
     tree* right;
-    tree* prev;
     tree* root;
     int data;
 };

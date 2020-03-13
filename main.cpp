@@ -13,8 +13,7 @@
 #include "tree.h"
 
 using namespace std;
-
-tree* buildTree();
+void buildTree(int value, tree* current);
 void printheap();
 
 int heap[100];
@@ -117,7 +116,10 @@ int main()
     }
     
     //printheap();
-    buildTree();
+    //buildTree();
+    for (int i = 0; i < position; i++) {//iterate through pasred array and add to tree
+        buildTree(heap[i], head);
+    }
 }
 
 void printheap()
@@ -128,24 +130,46 @@ void printheap()
     }
 }
 
-tree* buildTree()
+void buildTree(int value, tree* current)
 {
-    int pos = 0;
     // If the tree does not exist yet
     if(head == NULL)
     {
-        tree* t = new tree(heap[pos]);
-        t -> setRoot(t);
-        tree* prev = new tree(t->getData());
-        pos++;
+        tree* t = new tree(value);
+        head = t;
     }
     
     else // if the tree exists
     {
-        if(heap[pos] > prev -> getData())
+        // If the value is larger than the previous node
+        if(value > current -> getData())
         {
-            tree* right = new tree(heap[pos]);
-            prev -> setRight(right);
+            if(current -> getRight() == NULL)
+            {
+                tree* right = new tree(value);
+                current -> setRight(right);
+            }
+            else
+            {
+                buildTree(value, current-> getRight());
+            }
+        }
+        // If the value is less than, set as left
+        else if(value < current -> getData())
+        {
+            if(current -> getLeft() == NULL)
+            {
+                tree* left = new tree(value);
+                current -> setLeft(left);
+            }
+            else
+            {
+                buildTree(value, current-> getLeft());
+            }
+        }
+        else // the value is duplicate
+        {
+            
         }
     }
     
