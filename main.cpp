@@ -14,12 +14,14 @@
 
 using namespace std;
 void buildTree(int value, tree* current);
-void printheap();
+void visualPrint(tree* root, int space);
+void print(tree* root);
 
 int heap[100];
 int size;
 int counter = 0;
 int position;
+int ten = 10;
 
 tree* head = NULL;
 
@@ -116,18 +118,39 @@ int main()
     }
     
     //printheap();
-    //buildTree();
     for (int i = 0; i < position; i++) {//iterate through pasred array and add to tree
         buildTree(heap[i], head);
     }
 }
 
-void printheap()
+void visualPrint(tree* root, int space)
 {
-    for (int i = 0; i < position; i++)
+    // If the tree is empty
+    if(head == NULL)
     {
-        cout << heap[i] << " ";
+        return;
     }
+    // increase distance
+    space += ten;
+    
+    // Process right child
+    visualPrint(root->getRight(), space);
+    
+    // Print current node
+    cout << endl;
+    for (int i = ten; i < space; i++)
+    {
+        cout << " ";
+    }
+    cout << root -> getData() << "\n";
+    
+    // Process Left Child
+    visualPrint(root->getLeft(), space);
+}
+
+void print(tree* root)
+{
+    visualPrint(root, 0);
 }
 
 void buildTree(int value, tree* current)
@@ -171,6 +194,8 @@ void buildTree(int value, tree* current)
         {
             
         }
+        
+        print(current);
     }
     
     /*if(heap[current] <= t->getRoot()->getData())
