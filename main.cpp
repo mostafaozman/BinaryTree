@@ -16,6 +16,9 @@ using namespace std;
 void buildTree(int value, tree* current);
 void visualPrint(tree* root, int space);
 void print(tree* root);
+tree* search(tree* current, int value);
+tree* findGreatest(tree* current);
+void deleteNode(tree* current, int value);
 
 int heap[100];
 int size;
@@ -118,15 +121,24 @@ int main()
     }
     
     //printheap();
-    for (int i = 0; i < position; i++) {//iterate through pasred array and add to tree
+    for (int i = 0; i < position; i++)
+    {//iterate through pasred array and add to tree
         buildTree(heap[i], head);
     }
+    
+    print(head);
+    cout << findGreatest(head) -> getData();
+    if(search(head, 4)-> getData() == 4)
+    {
+        cout << "Yay"<< endl;
+    }
 }
+
 
 void visualPrint(tree* root, int space)
 {
     // If the tree is empty
-    if(head == NULL)
+    if(root == NULL)
     {
         return;
     }
@@ -194,31 +206,66 @@ void buildTree(int value, tree* current)
         {
             
         }
+    }
+}
+
+tree* search (tree* current, int value)
+{
+    if (current == NULL)
+    {
         
-        print(current);
     }
     
-    /*if(heap[current] <= t->getRoot()->getData())
-     {
-     tree* left = new tree(heap[current]);
-     t -> setLeft(left);
-     current++;
-     }
-     
-     if(heap[current] > t->getRoot()->getData())
-     {
-     cout << heap[current];
-     tree* right = new tree(heap[current]);
-     t -> setRight(right);
-     current++;
-     }
-     }
-     if (current == 2)
-     {
-     for(int i = 0; i < position; i++)
-     {
-     
-     }
-     }
-     return NULL;*/
+    if (value == current->getData())
+    {
+        return current;
+    }
+    else if (value > current->getData())
+    {
+        if(current->getRight() == NULL)
+        {
+            return NULL;
+        }
+        else
+        {
+            search(current->getRight(), value);
+        }
+    }
+    else if (value < current -> getData())
+    {
+        if (current-> getLeft() == NULL)
+        {
+            return NULL;
+        }
+        else
+        {
+            search(current->getLeft(), value);
+        }
+    }
+    
+    return NULL;
+}
+
+void deleteNode(tree* current, int value)
+{
+    
+}
+
+tree* findGreatest(tree* current)
+{
+    // go right once then left all the way
+    if(current == NULL || current->getRight() == NULL)
+    {
+        
+    }
+    else
+    {
+        current = current -> getRight();
+        
+        while(current->getLeft() != NULL)
+        {
+            current = current->getLeft();
+        }
+    }
+    return current;
 }
