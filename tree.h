@@ -18,18 +18,18 @@ public:
     // setters
     void setRight(tree* inRight);
     void setLeft(tree* inLeft);
-    void setNext(tree* inNext);
+    void setParent(tree* inParent);
     void setRoot(tree* inRoot);
     void setData(int inData);
     
     //getters
     tree* getRight();
     tree* getLeft();
-    tree* getNext();
+    tree* getParent();
     tree* getRoot();
     int getData();
     // all tree pointers
-    tree* next;
+    tree* parent;
     tree* left;
     tree* right;
     tree* root;

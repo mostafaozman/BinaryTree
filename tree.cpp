@@ -9,13 +9,13 @@
 #include <iostream>
 #include "tree.h"
 
-// A tree node will have a left pointer, right pointer, data, and a next
+// A tree node will have a keft pointer, right pointer, data, and a next
 tree::tree(int setData)
 {
     data = setData;
     right = NULL;
     left = NULL;
-    next = NULL;
+    parent = NULL;
     root = NULL;
 }
 
@@ -49,14 +49,14 @@ tree* tree::getRoot()
     return root;
 }
 
-void tree::setNext(tree* inNext)
+void tree::setParent(tree* inParent)
 {
-    next = inNext;
+    parent = inParent;
 }
 
-tree* tree::getNext()
+tree* tree::getParent()
 {
-    return next;
+    return parent;
 }
 
 void tree::setData(int inData)
