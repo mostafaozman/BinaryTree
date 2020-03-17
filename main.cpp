@@ -24,7 +24,9 @@ int heap[100];
 int size;
 int counter = 0;
 int position;
+int num;
 int ten = 10;
+bool yes = true;
 
 tree* head = NULL;
 
@@ -127,11 +129,62 @@ int main()
     }
     
     print(head);
-    cout << findGreatest(head) -> getData();
-    if(search(head, 4)-> getData() == 4)
+    cout << findGreatest(head) -> getData() << "\n";
+    // cout << search(head, 4)-> getData();
+    
+    while (yes == true)
     {
-        cout << "Yay"<< endl;
+        cout << "\nWhat would you like to  do? Search (1) Delete (2) Add (3) or  Print (4)" << endl;
+        cin >> type;
+        cin.clear();
+        cin.ignore(10000, '\n');
+        
+        if (type == 1)
+        {
+            cout << "What number would you like to search for?"<< endl;
+            cin >> num;
+            cin.clear();
+            cin.ignore(10000, '\n');
+            if(search(head, num)-> getData() == num)
+            {
+                cout << "\nFound!" << endl;
+            }
+            else
+            {
+                cout << "\nNot Found." << endl;
+            }
+        }
+        
+        if (type == 2)
+        {
+            cout << "What number would you like to delete" << endl;
+            cin >> num;
+            cin.clear();
+            cin.ignore(10000, '\n');
+            deleteNode(head, num);
+        }
+        
+        if (type == 3)
+        {
+            cout << "What number would you like to add?" << endl;
+            cin >> num;
+            cin.clear();
+            cin.ignore(10000, '\n');
+            buildTree(num, head);
+        }
+        
+        if (type == 4)
+        {
+            print(head);
+        }
+        
+        else
+        {
+            
+        }
+        
     }
+    
 }
 
 
@@ -183,6 +236,7 @@ void buildTree(int value, tree* current)
             {
                 tree* right = new tree(value);
                 current -> setRight(right);
+                right -> setParent(current);
             }
             else
             {
@@ -196,6 +250,7 @@ void buildTree(int value, tree* current)
             {
                 tree* left = new tree(value);
                 current -> setLeft(left);
+                left -> setParent(current);
             }
             else
             {
@@ -211,15 +266,16 @@ void buildTree(int value, tree* current)
 
 tree* search (tree* current, int value)
 {
-    if (current == NULL)
-    {
-        
-    }
-    
     if (value == current->getData())
     {
         return current;
     }
+    
+    if (current -> getLeft()== NULL && current -> getRight() == NULL)
+    {
+        return NULL;
+    }
+    
     else if (value > current->getData())
     {
         if(current->getRight() == NULL)
@@ -228,7 +284,7 @@ tree* search (tree* current, int value)
         }
         else
         {
-            search(current->getRight(), value);
+            return search(current->getRight(), value);
         }
     }
     else if (value < current -> getData())
@@ -239,15 +295,72 @@ tree* search (tree* current, int value)
         }
         else
         {
-            search(current->getLeft(), value);
+            return search(current->getLeft(), value);
         }
     }
+    
     
     return NULL;
 }
 
 void deleteNode(tree* current, int value)
-{
+{    // If we want to delete the head
+    if(current -> getParent() == NULL && current -> getLeft() == NULL && current -> getRight()==NULL && isalnum(current->getData()))
+    {
+        head = NULL;
+        return;
+    }
+    
+    tree* temp = search(current, value);
+    
+    if(temp -> getLeft() == NULL && temp-> getRight() == NULL) // If the node has no children
+    {
+        if(temp -> getParent() -> getLeft() == temp) // if it is the left child
+        {
+            temp -> getParent() -> setLeft(NULL);
+            delete temp;
+            return;
+        }
+        
+        if(temp -> getParent() -> getRight() == temp) // if it is the right child
+        {
+            temp -> getParent() -> setRight(NULL);
+            delete temp;
+            return;
+        }
+    }
+    
+    if((temp -> getLeft() != NULL && temp -> getRight() == NULL) || (temp -> getLeft() == NULL && temp -> getRight() != NULL)) // If the node has one child
+    {
+        if(temp -> getLeft() != NULL && temp -> getRight() == NULL) // if it is the left child
+        {
+            temp -> getLeft() -> setParent(temp->getParent());
+            temp -> getParent() -> setLeft(temp->getLeft());
+            delete temp;
+            return;
+        }
+        
+        if(temp -> getLeft() == NULL && temp -> getRight() != NULL) // if it is the left child
+        {
+            temp -> getRight() -> setParent(temp->getParent());
+            temp -> getParent() -> setRight(temp->getRight());
+            delete temp;
+            return;
+        }
+    }
+    
+    else if(temp->getRight() != NULL && temp -> getLeft() != NULL) // If the node as two children
+    {
+        temp -> setData(findGreatest(temp)  -> getData());
+        delete findGreatest(temp); // Find the next closest node
+        findGreatest(temp) -> getParent() -> setLeft(NULL);
+        findGreatest(temp) -> getParent() -> setRight(NULL);
+    }
+    
+    else
+    {
+        
+    }
     
 }
 
