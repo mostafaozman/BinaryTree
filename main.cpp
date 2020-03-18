@@ -61,6 +61,12 @@ int main()
         cin.get(fileName, 20);
         cin.clear();
         cin.ignore(1000000, '\n');
+        //        ifstream inputFile;
+        //        inputFile.open(fileName);
+        //        while (inputFile>>input)
+        //        {
+        //            cout<<input<<" ";
+        //        };
         streampos size;
         ifstream file(fileName, ios::in | ios::binary | ios::ate);
         if (file.is_open())
@@ -129,7 +135,7 @@ int main()
     }
     
     print(head);
-    cout << findGreatest(head) -> getData() << "\n";
+    //3 cout << findGreatest(head) -> getData() << "\n";
     // cout << search(head, 4)-> getData();
     
     while (yes == true)
@@ -145,7 +151,7 @@ int main()
             cin >> num;
             cin.clear();
             cin.ignore(10000, '\n');
-            if(search(head, num)-> getData() == num)
+            if(search(head, num) != NULL)
             {
                 cout << "\nFound!" << endl;
             }
@@ -284,7 +290,10 @@ tree* search (tree* current, int value)
         }
         else
         {
-            return search(current->getRight(), value);
+            if( current -> getRight() != NULL)
+            {
+                return search(current->getRight(), value);
+            }
         }
     }
     else if (value < current -> getData())
@@ -295,7 +304,10 @@ tree* search (tree* current, int value)
         }
         else
         {
-            return search(current->getLeft(), value);
+            if(current ->getLeft() != NULL)
+            {
+                return search(current->getLeft(), value);
+            }
         }
     }
     
@@ -340,21 +352,54 @@ void deleteNode(tree* current, int value)
             return;
         }
         
-        if(temp -> getLeft() == NULL && temp -> getRight() != NULL) // if it is the left child
+        if(temp -> getLeft() == NULL && temp -> getRight() != NULL) // if it is the right child
         {
-            temp -> getRight() -> setParent(temp->getParent());
-            temp -> getParent() -> setRight(temp->getRight());
-            delete temp;
+            tree* temp2 = temp->getRight();
+            temp2 -> setParent(temp->getParent());
+            temp -> getParent() -> setRight(temp2);
+            // delete temp;
             return;
         }
     }
     
-    else if(temp->getRight() != NULL && temp -> getLeft() != NULL) // If the node as two children
+    else if(temp->getRight() != NULL && temp -> getLeft() != NULL) // If the node has two children
     {
-        temp -> setData(findGreatest(temp)  -> getData());
-        delete findGreatest(temp); // Find the next closest node
-        findGreatest(temp) -> getParent() -> setLeft(NULL);
-        findGreatest(temp) -> getParent() -> setRight(NULL);
+        if(temp -> getParent() == NULL || temp -> getData() < head -> getData())
+        {
+            tree* tbd = findGreatest(temp);
+            if(tbd -> getLeft() == NULL && tbd -> getRight() == NULL &&  tbd -> getParent() -> getLeft() -> getData() == tbd -> getData()) // If tbd is a left child
+            {
+                tbd -> getParent() -> setLeft(NULL);
+                temp -> setData(tbd -> getData());
+                delete tbd;
+                
+            }
+            else  // tbd is a right child
+            {
+                tbd -> getParent() -> setRight(tbd -> getRight());
+                temp -> setData(tbd -> getData());
+                delete tbd;
+            }
+        }
+        else
+        {
+            tree* tbd = findGreatest(temp);
+            
+            if(tbd -> getData() > temp -> getData())
+            {
+                tbd -> getParent() -> setRight(tbd -> getRight());
+                temp -> setData(tbd -> getData());
+                delete tbd;
+            }
+            
+            if(tbd -> getData() < temp -> getData())
+            {
+                tbd -> getParent() -> setLeft(tbd -> getRight());
+                temp -> setData(tbd -> getData());
+                delete tbd;
+            }
+        }
+        
     }
     
     else
